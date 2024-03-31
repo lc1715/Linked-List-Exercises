@@ -1,4 +1,5 @@
 /** Node: node for a singly linked list. */
+
 class Node {
   constructor(val) {
     this.val = val;
@@ -6,6 +7,7 @@ class Node {
   }
 }
 // newNode = {val: val, next: null}
+
 /** LinkedList: chained together nodes. */
 
 class LinkedList {
@@ -14,184 +16,265 @@ class LinkedList {
     this.tail = null;
     this.length = 0;
 
-    for (let val of vals) this.push(val);
+    for (let val of vals) {
+      this.push(val);
+    }
   }
-
-  // let lst = new LinkedList([5, 10]); 
-  //numsList = {head: {val:2, next:{val:3, next:null}}, tail: {val:3, next:null}, length: 0 }
 
   /** push(val): add new value to end of list. */
 
   push(val) {
-    const newNode = new Node(val); // {val: 2, next: null}
+    let newNode = new Node(val)
+
     if (!this.head) {
-      this.head = newNode;    // head = {val:2, next:null}
-      this.tail = newNode;    // tail = {val:2, next:null}
-      // this.tail = this.head 
-    } else {
-      this.tail.next = newNode; //head = {val:2, next: {val:3, next:null}} AND tail = {val:2, next: {val:3, next:null}} 
-      this.tail = newNode;      //head = {val:2, next: {val:3, next:null}} AND tail = {val:3, next:null}
+      this.head = newNode;
+      this.tail = newNode;
     }
-    this.length += 1;
-  }
-
-  // Whatever we make this.tail.next equal to, then we will make this.head.next equal to the exact same thing!!!
-  // Becasue this.tail.next and this.head.next both have the same reference in memory to the exact same node,
-  // (both point to the exact same newNode), then if you update this.tail.next to be equal to the new node,
-  // then this.head.next will also refer to that new node, it will also become equal to that exact same node
-  // becuase it's reference in memory is also referencing that exact same node.
-  //numsList = {head: null, tail: null, length:0}
-  //numsList = {head: Node, tail: Node, length: 0}
-  //numsList = {head: {val:2, next:null}, tail: {val:2, next:null}, length: 0 }
-  //this.tail.next = numsList = {head: {val:2, next:{val:3, next:null}}, tail: {val:2, next:{val:3, next:null}}, length: 0 }
-  //this.tail = numsList = {head: {val:2, next:{val:3, next:null}}, tail: {val:3, next:null}, length: 0 }
-
-  // const numsList = new LinkedList()
-  // numsList.push(2)
-  // numsList.push(3)
-  // numsList.push(4)
-
-  /** unshift(val): add new value to start of list. */
-  unshift(val) {
-    const newNode = new Node(val)  //{val:3, next: null} //{val:4, next: null}
-    if (this.head === null) {
-      this.head = newNode; //numsList = {head: {val:2, next: null}, tail: null, length: 0}
-    } else {
-      newNode.next = this.head //{val:4, next: {val:3, next: {val:2, next: null}, tail: null, length: 0}}}
-      this.head = newNode //{head: {val:4, next: {val:3, next: {val:2, next: null}, tail: null, length: 0}}}
-    }
-    if (this.length === 0) {
-      this.tail = this.head //numsList = {head:{val:2, next:null}, tail:{val:2, next:null}, length: 0}
-    }
+    this.tail.next = newNode
+    this.tail = newNode
     this.length += 1
   }
 
-  // const numsList2 = new LinkedList()
-  // numsList2.unshift(2)
-  // numsList2.unshift(3)
-  // numsList2.unshift(4)
 
-  // /** Node: node for a singly linked list. */
-  // class Node {
-  //   constructor(val) {
-  //     this.val = val;
-  //     this.next = null;
-  //   }
-  // }
-  // // newNode = {val: val, next: null}
+  /** unshift(val): add new value to start of list. */
 
-  // /** LinkedList: chained together nodes. */
-  // class LinkedList {
-  //   constructor(vals = []) {
-  //     this.head = null;
-  //     this.tail = null;
-  //     this.length = 0;
+  unshift(val) {
+    const newNode = new Node(val)
+    if (this.head == null) {
+      this.head = newNode
+      this.tail = newNode
 
-  //     for (let val of vals) this.push(val);
-  //   }
-  //   numsList = { head: null, tail: null, length: 0 }
+    }
+    newNode.next = this.head
+    this.head = newNode
+    this.length += 1
+  }
 
-  // let numsList = new LinkedList([2, 3]); 
-  //numsList = {head: {val:2, next:{val:3, next:null}}, tail: {val:3, next:null}, length: 0 }
 
-  /** pop(): return & remove last item. */ //Remove & return tail value. Throws error if list is empty.
+  /** pop(): return & remove last item. */
+
   pop() {
-    if (!this.head) {
-      return undefined;
+    if (this.head.next == null) {
+      let val = this.head.val
+      this.head = null
+      this.tail = null
+      this.length -= 1
+      return this.returnNodeValue(val)
     }
 
-    let currentNode = this.head;  // currentNode = {val:2, next:{val:3, next:null}}
-    let newTail = currentNode;    // newTail = {val:2, next:{val:3, next:null}}
+    let firstNode = this.head
+    let currentNode = this.head
 
-    while (currentNode.next) {
-      newTail = currentNode;
-      //newTail = {val:2, next:{val:3, next:{val:4, next:null}}}, {val:3, next:{val:4, next:null}, {val:4, next:null}
-      console.log(newTail)
-      currentNode = currentNode.next;  // {val:3, next:{val:4, next:null}, {val:4, next:null}
+    while (currentNode.next.next != null) {
+      currentNode = currentNode.next
     }
 
-    this.tail = newTail;  // {val:3, next:null} becasue with {val:4, next:null}, next is equal to null
-    this.tail.next = null;
-    this.length -= 1;
+    let val = currentNode.next.val
 
-    if (this.length === 0) {
-      this.head = null;
-      this.tail = null;
-      console.log('this.tail=', this.tail)
-      return this.tail
+    currentNode.next = null
+    this.tail = currentNode
+    this.head = firstNode
+
+    this.length -= 1
+
+    return this.returnNodeValue(val)
+  }
+
+  /** shift(): return & remove first item. */
+
+  shift() {
+    let val = this.head.val
+
+    this.head = this.head.next
+    this.length -= 1
+
+    if (this.head == null) {
+      this.tail = null
+    }
+    return this.returnNodeValue(val)
+  }
+
+
+  /** getAt(idx): get val at idx. */
+
+  getAt(idx) {
+    let val = null
+
+    if (idx == 0) {
+      return this.returnNodeValue(this.head.val)
+    }
+    else {
+      if (idx < this.length) {
+        for (let i = 1; i <= idx; i++) {
+          let currentNode = this.head
+          this.head = currentNode.next
+          val = this.head.val
+        }
+      }
+    }
+    return this.returnNodeValue(val)
+  }
+
+  returnNodeValue(val) {
+    return val
+  }
+
+
+  /** setAt(idx, val): set the val at this idx to be the variable, val */
+
+  setAt(idx, val) {
+    let firstHead = this.head
+    let currentNode = this.head
+
+    if (idx == 0) {
+      currentNode.val = val
+      this.head = firstHead
+      return this.returnNodeValue(currentNode.val)
+    }
+    else {
+      if (idx < this.length) {
+        for (let i = 1; i <= idx; i++) {
+          currentNode = currentNode.next
+          if (i == idx) {
+            currentNode.val = val
+            this.head = firstHead
+            return this.returnNodeValue(currentNode.val)
+          }
+
+        }
+      }
+    }
+  }
+
+  /** insertAt(idx, val): add a new node with val as the variable, val, before idx. */
+
+  insertAt(idx, val) {
+    const newNode = new Node(val)
+
+    let firstHead = this.head
+    let currentNode = this.head
+
+    if (this.length == 0) {
+      this.head = newNode
+      this.tail = newNode
+      this.length += 1
+      return this.returnNodeValue(this.head.val)
     }
 
-    console.log('this.tail.val=', this.tail.val)
-    return this.tail.val
-    // return currentNode;
-    // // let numsList3 = new LinkedList([2, 3])
-    // // // numsList3 = {head: {val:2, next:{val:3, next:null}}, tail: {val:3, next:null}, length: 2 }
-    // let currentNode = this.head
-    // //currentNode = {val:2, next:{val:3, next:null}       
+    if (idx == 0) {
+      this.head = newNode
+      this.head.next = firstHead
 
-    // while (currentNode) {
-    //   // console.log(currentNode.val)
-    //   let lengthofnode = this.length
-    //   if (currentNode.next === null) {
-    //     // console.log('node val when next is null', currentNode.val)
-    //     delete currentNode.val
-    //     delete currentNode.next
+      this.length += 1
+      return this.returnNodeValue(currentNode.val)
+    }
+    else {
+      if (idx < this.length) {
 
-    //     this.length -= 1
-    //     // let tail = this.tail.val = this.length + 1
-    //     // console.log('tail is', tail)
-    //     // console.log('length is', this.length)
-    //   }
-    //   currentNode = currentNode.next
-    //   // console.log('currentNode is', currentNode)
+        for (let i = 0; i <= idx; i++) {
+          if (i == idx - 1) {
+            let restOfList = currentNode.next
+            currentNode.next = newNode
+            newNode.next = restOfList
 
-    // }
-    // // currentNode = this.head.next
-    // // this.tail.val = currentNode
-    // // console.log('tail is equal to', tail)
-    // // return this.tail.val
+            this.length += 1
+            return this.returnNodeValue(newNode.val)
+          }
+          else {
+            currentNode = currentNode.next
+          }
+        }
+      }
+    }
+    if (idx == this.length) {
+      this.tail.next = newNode
+      this.tail = newNode
+
+      this.length += 1
+      return this.returnNodeValue(newNode.val)
+    }
+  }
+
+
+
+  /** removeAt(idx): return & remove item at idx, */
+  removeAt(idx) {
+
+    let restOfList = null
+    let firstHead = this.head
+    let currentNode = this.head
+
+    if (idx == 0) {
+      currentNode = currentNode.next
+      this.head = null
+      this.tail = null
+
+      this.length -= 1
+      return this.returnNodeValue(currentNode.val)
+    }
+
+    if (idx == this.length - 1) {
+      this.pop()
+      return this.returnNodeValue(this.head)
+    }
+
+
+    if (idx < this.length) {
+
+      for (let i = 1; i <= idx; i++) {
+        if (i == idx) {
+          currentNode = currentNode.next
+          restOfList = currentNode.next
+        }
+        else {
+          currentNode = currentNode.next
+        }
+      }
+
+      if (idx == 1) {
+        this.head = firstHead
+        this.head.next = restOfList
+
+        this.length -= 1
+        return this.returnNodeValue(this.head.val)
+      }
+
+      for (let i = 1; i <= idx; i++) {
+        if (i == idx) {
+          currentNode.next = restOfList
+
+          this.length -= 1
+          return this.returnNodeValue(currentNode.val)
+        }
+        else {
+          currentNode = firstHead
+          currentNode = currentNode.next
+        }
+      }
+    }
+
+  }
+
+
+
+  /** average(): return an average of all values in the list */
+
+  average() {
+    let count = 0
+    let totalValue = 0
+    let currentNode = this.head
+
+    if (this.length == 0) {
+      return 0
+    }
+
+    while (currentNode) {
+      count += 1
+      totalValue += currentNode.val
+      currentNode = currentNode.next
+    }
+    return totalValue / count
   }
 
 }
-let numsList3 = new LinkedList([2, 3])
-// numsList3 = {head: {val:2, next:{val:3, next:null}}, tail: {val:3, next:null}, length: 0 }
-//   /** shift(): return & remove first item. */
 
-//   shift() {
-
-//   }
-
-//   /** getAt(idx): get val at idx. */
-
-//   getAt(idx) {
-
-//   }
-
-//   /** setAt(idx, val): set val at idx to val */
-
-//   setAt(idx, val) {
-
-//   }
-
-//   /** insertAt(idx, val): add node w/val before idx. */
-
-//   insertAt(idx, val) {
-
-//   }
-
-//   /** removeAt(idx): return & remove item at idx, */
-
-//   removeAt(idx) {
-
-//   }
-
-//   /** average(): return an average of all values in the list */
-
-//   average() {
-
-//   }
-// }
-
-// Not sure why I needed this line. Had to comment this line out in 
-// order for Jasmine testing to work.
-// module.exports = LinkedList;
